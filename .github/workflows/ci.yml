@@ -1,0 +1,60 @@
+name: CI/CD Phase Challenge
+
+on: [push]
+
+jobs:
+  # JOB 1: Test and Generate Evidence
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run Pytest
+        run: pytest -v -s
+      - name: Upload Evidence
+        uses: actions/upload-artifact@v4
+        if: always() # PRESERVES EVIDENCE EVEN IF PYTEST FAILS
+        with:
+          name: phase-challenge-evidence
+          path: artifacts/
+          retention-days: 7
+
+  # JOB 2: Independent Verification
+  verify:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download Evidence Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: phase-challenge-evidence
+          path: downloaded-artifacts
+      - name: Verify Checksum
+        run: python verify.py downloaded-artifacts
+
+  # JOB 3: Final Quality Gate
+  gate:
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - name: Final Gate Decision
+        run: |
+          echo "================================="
+          echo "PHASE CHALLENGE FINAL GATE"
+          echo "================================="
+          echo "Test execution:      PASS"
+          echo "Evidence upload:     PASS"
+          echo "SHA-256 verification: PASS"
+          echo "FINAL GATE: PASS ✅"
