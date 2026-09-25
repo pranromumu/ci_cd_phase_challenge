@@ -3,7 +3,8 @@ from pathlib import Path
 from datetime import datetime
 
 def test_math():
-    assert 10 + 5 == 15
+    #assert 10 + 5 == 15
+    assert 1 == 2
 
 def test_string_reverse():
     assert "hello"[::-1] == "olleh"
