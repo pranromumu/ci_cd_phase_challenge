@@ -25,4 +25,5 @@ def test_generate_evidence():
     evidence_file.write_bytes(evidence_bytes)
     
     actual_hash = hashlib.sha256(evidence_bytes).hexdigest()
-    checksum_file.write_text(actual_hash)
+    #checksum_file.write_text(actual_hash)
+    checksum_file.write_text("fakehash123")
