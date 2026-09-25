@@ -3,8 +3,8 @@ from pathlib import Path
 from datetime import datetime
 
 def test_math():
-    #assert 10 + 5 == 15
-    assert 1 == 2
+    assert 10 + 5 == 15
+    #assert 1 == 2
 
 def test_string_reverse():
     assert "hello"[::-1] == "olleh"
@@ -25,5 +25,5 @@ def test_generate_evidence():
     evidence_file.write_bytes(evidence_bytes)
     
     actual_hash = hashlib.sha256(evidence_bytes).hexdigest()
-    #checksum_file.write_text(actual_hash)
-    checksum_file.write_text("fakehash123")
+    checksum_file.write_text(actual_hash)
+    #checksum_file.write_text("fakehash123")
